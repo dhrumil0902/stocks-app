@@ -16,21 +16,11 @@ from PIL import Image
 import streamlit.components.v1 as components
 import json
 
-
+#setting up headers and page layout
 st.set_page_config(layout = "wide")
 tab1, tab2, tab3 = st.tabs(["Stock", "Risk Calculaor",'News'])
 
-#yfnews_dict = (yf.Ticker('AAPL').news)
-#st.write(yfnews_dict)
-#st.write("check out this [link](%s)" % url)
-
-
-
-#wb_obj = openpyxl.load_workbook("tickers.xlsx") 
-  
-# Get workbook active sheet object 
-# from the active attribute 
-#sheet_obj = wb_obj.active #print(ticker_list.ticker_ls)
+#tab1 has general info
 with tab1:
     print(len(ticker_list.ticker_ls))
     sorted(ticker_list.ticker_ls)
@@ -42,38 +32,7 @@ with tab1:
     country = []
 
     ticker_info =yf.Ticker(ticker_list.ticker_ls[0])
-    #for i in range(7929):#len(ticker_list.ticker_ls)):
 
-        ##fiftyhigh.append(yf.Ticker(ticker_list.ticker_ls[i]).info['fiftyTwoWeekHigh'])
-        ##fiftylow.append(yf.Ticker(ticker_list.ticker_ls[i]).info['fiftyTwoWeekLow'])
-        ##curr_price.append(yf.Ticker(ticker_list.ticker_ls[i]).info['currentPrice'])
-        ##sector.append(yf.Ticker(ticker_list.ticker_ls[i]).info['sector'])
-        #sector = yf.Ticker(ticker_list.ticker_list[i]).info['sector']
-        #print(sector)
-
-    ## if ticker_list.ticker_ls[i] == 'AAL':
-    ##     print(yf.Ticker(ticker_list.ticker_ls[i]).info['sector'])
-    ##     print(yf.Ticker(ticker_list.ticker_ls[i]).info['currentPrice'])
-    ##     print(yf.Ticker(ticker_list.ticker_ls[i]).info['fiftyTwoWeekHigh'])
-    ##     print(yf.Ticker(ticker_list.ticker_ls[i]).info['fiftyTwoWeekLow'])
-
-        
-
-
-    ##print(fiftyhigh)
-    ##print(curr_price)
-    ##print(sector)
-
-    ##prices1=pd.DataFrame(ticker_list.ticker_ls, fiftyhigh)
-    #prices1.head(30)
-
-    ##with header:
-    #	st.Title("welcome")
-
-    ##st.header(123445678)
-    ##write(1234)
-
-    display = 'soccer'
     now = dt.datetime.now().strftime('%y')
     
     list1 = ['h','y','r']
@@ -100,10 +59,7 @@ with tab1:
 
     with st.container():
         col1, col1c,col1b,col1d, col2,col3,col4 = st.columns([1.5,1,1,1,5,0.5,.5], gap="small")
-        
-        ##image = Image.open(yf.Ticker(result).info['logo_url'])
-        ##print(yf.Ticker(result).info['logo_url'])
-        ##st.image(image, caption='logo URL Testing')
+
 
         if(yf.Ticker(result).info['regularMarketPrice'] != None):
             price =  (yf.Ticker(result).info['currentPrice']  - yf.Ticker(result).info['fiftyTwoWeekHigh'])  / yf.Ticker(result).info['fiftyTwoWeekHigh'] * 100
@@ -148,7 +104,7 @@ with tab1:
     
     with tab1a:
         "Twitter"
-        # read configs
+        
         config = configparser.ConfigParser()
         config.read('pass')
 
@@ -158,39 +114,24 @@ with tab1:
         access_token = config['twitter']['access_token']
         access_token_secret = config['twitter']['access_token_secret']
 
-        # authentication
+
         auth = tweepy.OAuthHandler(api_key, api_key_secret)
         auth.set_access_token(access_token, access_token_secret)
 
         api = tweepy.API(auth)
 
         
-
-        ##public_tweets = api.home_timeline()
-
-        ##columns = ['Time', 'User', 'Tweet']
-        ##data = []
-        ##for tweet in public_tweets:
-        ##    data.append([tweet.created_at, tweet.user.screen_name, tweet.text])
-
-        ##df = pd.DataFrame(data, columns=columns)
-
-        ##df.to_csv('tweets.csv')
-
-        ##print(df)
-
-       # pd.set_option('display.max_rowheight', 0)
+        
         keywords = "$" + result
+        #display 5 results at max
         limit=5
 
         tweets = tweepy.Cursor(api.search_tweets, q=keywords, count=100, tweet_mode='extended').items(limit)
 
-        # tweets = api.user_timeline(screen_name=user, count=limit, tweet_mode='extended')
-
-        # create DataFrame
+  
         columns = ['User', 'Tweet','URL']
         data = []
-
+        
         for tweet in tweets:
             hyperlink = f"https://twitter.com/{tweet.user.screen_name}/status/{tweet.id}"
             link = "https://twitter.com/{tweet.user.screen_name}/status/{tweet.id}"
@@ -236,15 +177,10 @@ with tab1:
 
         print(posts)
 
-    
-        
-
-
-        
 
         
 with tab2:
-    display = 'soccer'
+
     now = dt.datetime.now().strftime('%y')
     
     list1 = ['h','y','r']
